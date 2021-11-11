@@ -1,132 +1,118 @@
 import csv
 
-records = []
-headings = []
+def load_data(fpath):
+    print("Loading Data! ")
+    with open(fpath) as file:
+        loaded = csv.reader(file)
+        headings = next(loaded)
 
+        for i in loaded:
+            records.append(i)
 
-def load_data(file_path):
-    print("Loading data...", end="")
-
-    with open(file_path) as csv_file:
-        csv_reader = csv.reader(csv_file)
-        headings = next(csv_reader)
-
-        for line in csv_reader:
-            records.append(line)
-
-    print("Done!")
-
+    print("Done! ")
 
 def display_menu():
-    print(
-        """
-        Please select one of the following options:
-        [1] Display the names of all passengers
-        [2] Display the number of passengers that survived
-        [3] Display the number of passengers per gender
-        [4] Display the number of passengers per age group
-        [5] Display the number of survivors per age group"
-      
-        """)
-
-    return int(input())
-
+    print("Please select one of the following options:\n[1] Display the names of all passengers\n[2] Display the number of passengers that survived\n[3] Display the number of passengers per gender\n[4] Display the number of passengers per age group\n[5] Display the number of survivors per age group\n")
+    response = int(input())
+    return response
 
 def display_passenger_names():
-    print("The names of the passengers are...\n")
-
-    for record in records:
-        passenger_name = record[3]
-        print(passenger_name)
-
+    print("The names of the passengers are: ")
+    for i in records:
+        name = i[3]
+        print(name)
 
 def display_num_survivors():
-    num_survived = 0
+    survived = 0
 
-    for record in records:
-        survival_status = int(record[1])
-        if survival_status == 1:
-            num_survived += 1
-
-    print(f"{num_survived} passengers survived")
-
+    for i in records:
+        survival = int(i[1])
+        if survival == 1:
+            survived += 1
+    print(f"{survived} passengers survived")
 
 def display_passengers_per_gender():
-    females = 0
-    males = 0
+    female = 0
+    male = 0
 
-    for record in records:
-        gender = record[4]
+    for i in records:
+        gender = i[4]
         if gender.lower() == "male":
-            males += 1
+            male += 1
         else:
-            females += 1
+            female += 1
 
-    print(f"females: {females}, males: {males}")
-
+    print(f"male: {male}, female: {female}")
 
 def display_passengers_per_age_group():
-    children = adults = elderly = 0
+    child = 0
+    adult = 0
+    elderly = 0
 
-    for record in records:
-        if record[5] != "":
-            age = float(record[5])
+    for i in records:
+        if i[5] != "":
+            age = float(i[5])
             if age < 18:
-                children += 1
+                child = child + 1
             elif age < 65:
-                adults += 1
+                adult = adult + 1
             else:
-                elderly += 1
+                elderly = elderly + 1
 
-    print(f"children: {children}, adults: {adults}, elderly: {elderly}")
+    print(f"children: {child}, adults: {adult}, elderly: {elderly}")
 
 
 def display_survivors_per_age_group():
-    children = adults = elderly = 0
-    child_survivors = adult_survivors = elderly_survivors = 0
+    child = 0
+    adult = 0
+    elderly = 0
+    child_survivor = 0
+    adult_survivor = 0
+    elderly_survivor = 0
 
-    for record in records:
-        survived = int(record[1])
-        if record[5] != "":
-            age = float(record[5])
+    for i in records:
+        survived = int(i[1])
+        if i[5] != "":
+            age = float(i[5])
             if age < 18:
-                children += 1
+                child += 1
                 if survived == 1:
-                    child_survivors += 1
+                    child_survivor += 1
             elif age < 65:
-                adults += 1
+                adult += 1
                 if survived == 1:
-                    adult_survivors += 1
+                    adult_survivor += 1
             else:
                 elderly += 1
                 if survived == 1:
-                    elderly_survivors += 1
+                    elderly_survivor += 1
 
     print(
-        f"children: {child_survivors}/{children}, adults: {adult_survivors}/{adults}, elderly: {elderly_survivors}/{elderly}")
-
+        f"children: {child_survivor}/{child}, adults: {adult_survivor}/{adult}, elderly: {elderly_survivor}/{elderly}")
 
 def run():
-    load_data("titanic.csv")
-    num_records = len(records)
-    print(f"Successfully loaded {num_records} records.")
+  load_data("titanic.csv")
+  recordcount = len(records)
+  print(f"Successfully loaded {recordcount} records ")
 
-    selected_option = display_menu()
-    print(f"You have selection option: {selected_option}\n")
+  choice = display_menu()
+  print(f"You have selected option: {choice} ")
 
-    if selected_option == 1:
-        display_passenger_names()
-    elif selected_option == 2:
-        display_num_survivors()
-    elif selected_option == 3:
-        display_passengers_per_gender()
-    elif selected_option == 4:
-        display_passengers_per_age_group()
-    elif selected_option == 5:
-        display_survivors_per_age_group()
-    else:
-        print("Error! Option not recognised!")
+  if choice == 1:
+    display_passenger_names()
+  elif choice == 2:
+    display_num_survivors()
+  elif choice == 3:
+    display_passengers_per_gender()
+  elif choice == 4:
+    display_passengers_per_age_group()
+  elif choice == 5:
+    display_survivors_per_age_group()
+  else:
+    print("Invalid Option! ")
 
+records = []
+headings = []
 
-if __name__ == "__main__":
+if __name__ == "main":
     run()
